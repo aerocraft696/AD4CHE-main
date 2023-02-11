@@ -24,11 +24,11 @@ def Srotate(angle,valuex,valuey,pointx,pointy):
   return sRotatex,sRotatey
 
 class VisualizationPlot(object):
-    def __init__(self, arguments, read_tracks, static_info, meta_dictionary, fig=None):
+    def __init__(self, arguments, read_tracks, static_info, fig=None):
         self.arguments = arguments
         self.tracks = read_tracks
         self.static_info = static_info
-        self.meta_dictionary = meta_dictionary
+        #self.meta_dictionary = meta_dictionary
         last_track = self.tracks[len(self.tracks) - 1]
         self.maximum_frames = self.static_info[last_track[TRACK_ID]][FINAL_FRAME] - 1
         self.current_frame = 1
@@ -59,7 +59,7 @@ class VisualizationPlot(object):
             self.y_sign = -1
             self.outer_line_thickness = .2
             self.lane_color = "white"
-            self.plot_highway()
+            #self.plot_highway()
 
         # Initialize the plot with the bounding boxes of the first frame
         self.update_figure()
@@ -137,7 +137,8 @@ class VisualizationPlot(object):
 
     def update_figure(self):
         # Dictionaries for the style of the different objects that are visualized
-        rect_style = dict(facecolor="r", fill=True, edgecolor="k", zorder=19)
+        rect_style1 = dict(facecolor="r", fill=True, edgecolor="k", zorder=19)
+        rect_style2 = dict(facecolor="g", fill=True, edgecolor="k", zorder=19)
         triangle_style = dict(facecolor="k", fill=True, edgecolor="k", lw=0.1, alpha=0.6, zorder=19)
         text_style = dict(picker=True, size=8, color='k', zorder=10, ha="center")
         text_box_style = dict(boxstyle="round,pad=0.2", fc="yellow", alpha=.6, ec="black", lw=0.2)
@@ -174,8 +175,15 @@ class VisualizationPlot(object):
                 if self.arguments["plotBoundingBoxes"]:
                     if self.y_sign < 0:
                         bounding_box_y += self.y_sign * bounding_box[3]
-                    rect = plt.Rectangle((bounding_box[0], bounding_box_y), bounding_box[2],
-                                         bounding_box[3], angle=track[ORIENT][current_index]*180/math.pi,rotation_point='center',**rect_style)
+                    vehicle_class = static_track_information[CLASS][0]
+                    if  vehicle_class == "c":
+                        rect = plt.Rectangle((bounding_box[0], bounding_box_y), bounding_box[2],
+                                         bounding_box[3], angle=track[ORIENT][current_index]*180/math.pi,rotation_point='center',**rect_style1)
+                    else:
+                        rect = plt.Rectangle((bounding_box[0], bounding_box_y), bounding_box[2],
+                                             bounding_box[3], angle=track[ORIENT][current_index] * 180 / math.pi,
+                                             rotation_point='center', **rect_style2)
+
                     self.ax.add_patch(rect)
                     plotted_objects.append(rect)
 
@@ -209,8 +217,8 @@ class VisualizationPlot(object):
                     vehicle_class = static_track_information[CLASS][0]
 
                     annotation_text = ""
-                    if self.arguments["plotClass"]:
-                        annotation_text += "{}".format(vehicle_class)
+                    # if self.arguments["plotClass"]:
+                    #     annotation_text += "{}".format(vehicle_class)
                     if self.arguments["plotVelocity"]:
                         if annotation_text != '':
                             annotation_text += '|'
@@ -255,7 +263,7 @@ class VisualizationPlot(object):
                 # Save the plotted objects in a list
         self.fig.canvas.mpl_connect('pick_event', self.on_click)
         self.plotted_objects = plotted_objects
-
+    """
     def plot_highway(self):
         # Initialization
         upper_lanes = self.meta_dictionary[UPPER_LANE_MARKINGS]
@@ -288,7 +296,7 @@ class VisualizationPlot(object):
                              color=self.lane_color,
                              alpha=1, zorder=5)
         self.ax.add_patch(rect)
-
+    """
     def on_click(self, event):
         artist = event.artist
         text_value = artist._text

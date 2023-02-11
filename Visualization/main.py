@@ -23,7 +23,7 @@ def create_args():
     # --- Settings ---
     parser.add_argument('--visualize', default=True, type=lambda x: (str(x).lower() == 'true'),
                         help='True if you want to visualize the data.')
-    parser.add_argument('--background_image', default="../data/01_highway.jpg", type=str,
+    parser.add_argument('--background_image', default="../data/01_backgroundpics.jpg", type=str,
                         help='Optional: you can specify the correlating background image.')
 
     # --- Visualization settings ---
@@ -75,12 +75,13 @@ if __name__ == '__main__':
         sys.exit(1)
 
     # Read the video meta
+    """
     try:
         meta_dictionary = read_meta_info(created_arguments)
     except:
         print("The video meta file is either missing or contains incorrect characters.")
         sys.exit(1)
-
+    """
     if created_arguments["visualize"]:
         if tracks is None:
             print("Please specify the path to the tracks csv/pickle file.")
@@ -88,8 +89,13 @@ if __name__ == '__main__':
         if static_info is None:
             print("Please specify the path to the static tracks csv file.")
             sys.exit(1)
+        """
+                
+                
         if meta_dictionary is None:
-            print("Please specify the path to the video meta csv file.")
-            sys.exit(1)
-        visualization_plot = VisualizationPlot(created_arguments, tracks, static_info, meta_dictionary)
+        print("Please specify the path to the video meta csv file.")
+        sys.exit(1)
+        """
+
+        visualization_plot = VisualizationPlot(created_arguments, tracks, static_info)
         visualization_plot.show()
