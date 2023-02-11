@@ -4,7 +4,9 @@ plot. Through modularity, one can use the i/o functions directly for own usage. 
 each method is shortly described to maintain easy and correct usage.
 
 ```
- |-data
+ |-AD4CHE_Data_Vx.0
+    |- DJI_000x
+    |- DJI_...
  |-Visualization
     |- data_management
         |- read_csv.py
