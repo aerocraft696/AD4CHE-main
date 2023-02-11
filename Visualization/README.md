@@ -5,7 +5,7 @@ each method is shortly described to maintain easy and correct usage.
 
 ```
  |-data
- |-src
+ |-Visualization
     |- data_management
         |- read_csv.py
     |- utils
